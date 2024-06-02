@@ -22,7 +22,7 @@ on:
       OUTPUT_ZIP:
         description: '每个章节打成独立压缩包'
         type: boolean
-        default: true
+        default: false
       UPLOAD_FILEIO:
         description: '上传到 file.io'
         type: boolean
