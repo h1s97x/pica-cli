@@ -121,7 +121,7 @@ async function main() {
             return
         }
 
-        const inputKeys = inputStr.split('#')
+        const inputKeys = inputStr.split('-')
 
         // 根据漫画ID查询
         const bookIds = inputKeys.filter((k: string) => isValidComicId(k))

@@ -1,21 +1,22 @@
-name: Export Favorites 
+name: 导出收藏夹
 
 on:
   workflow_dispatch:
     inputs:
-      PICA_PRINT_FAVS:
-        description: '打印收藏夹的全部内容'
+      DEBUG:
+        description: '调试模式'
         type: boolean
         default: false
 
 
 env:
   DEBUG: ${{ inputs.DEBUG && 'pica' }}
-  PICA_PRINT_FAVS: ${{ 'true' }}
   PICA_IN_GITHUB: true # 用于区分运行环境，不要修改
   PICA_ACCOUNT: ${{ secrets.PICA_ACCOUNT }}
   PICA_PASSWORD: ${{ secrets.PICA_PASSWORD }}
 
+  # 固定值
+  ZIP_FP: /home/runner/work/comics/download/export.7z
 jobs:
   download:
     runs-on: ubuntu-latest
@@ -39,31 +40,16 @@ jobs:
           pnpm install
           pnpm run build
 
-      - name: Download
-        run: pnpm start
-
-      - name: Compress
-        if: inputs.OUTPUT_ZIP
-        run: pnpm start:zip
-
-      - name: Upload to github
-        uses: actions/upload-artifact@v4
-        with:
-          name: pica-comics
-          path: ${{ inputs.OUTPUT_ZIP && 'comics-zip/' || 'comics/' }}
-          retention-days: 7
-
       - name: Print favorites content
-        if: inputs.PICA_PRINT_FAVS
         run: |
           echo "Printing favorites content:"
-          pnpm run print-favorites
-        continue-on-error: true
-        
-      - name: 上传结果
+          pnpm print-favorites
+
+      - name: Upload to github
         uses: actions/upload-artifact@v4
         with:
           name: '导出的收藏夹'
           path: ${{ env.ZIP_FP }}
           if-no-files-found: error
           retention-days: 90
+

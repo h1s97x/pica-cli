@@ -15,6 +15,7 @@
     "dev:zip": "tsx src/zip.ts",
     "start": "node dist/index.js",
     "start:zip": "node dist/zip.js",
+    "print-favorites": "node dist/favorite.js",
     "build": "rimraf dist && rollup --config rollup.config.js",
     "test": "vitest",
     "pub": "pnpm build && npm publish",

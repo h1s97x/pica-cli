@@ -3,21 +3,14 @@ name: Download PICA Comics(dispatch)
 on:
   workflow_dispatch:
     inputs:
-      PICA_DL_CONTENT:
-        description: '想下点什么？搜索/排行榜'
-        required: true
-        type: choice
-        default: search
-        options:
-          - search
-          - leaderboard
-      PICA_DL_SEARCH_KEYWORDS:
-        description: '搜索关键字或者漫画ID (多个用 - 隔开)'
-        type: string
+        PICA_DL_FAV_PAGE:
+        description: '指定下载收藏夹的第几页(示例：1,3,5-20)'
+        type: 'string'
+        default: 'all'
       PICA_DL_CHAPTER:
         description: '指定下载章节 (示例：1,3,5-20)'
         type: string
-        default: '全部'
+        default: 'all'
       OUTPUT_ZIP:
         description: '每个章节打成独立压缩包'
         type: boolean
@@ -36,9 +29,9 @@ env:
   PICA_IN_GITHUB: true # 用于区分运行环境，不要修改
   PICA_ACCOUNT: ${{ secrets.PICA_ACCOUNT }}
   PICA_PASSWORD: ${{ secrets.PICA_PASSWORD }}
-  PICA_DL_CONTENT: ${{ inputs.PICA_DL_CONTENT }}
-  PICA_DL_SEARCH_KEYWORDS: ${{ inputs.PICA_DL_SEARCH_KEYWORDS }}
+  PICA_DL_CONTENT: ${{ 'favorite' }}
   PICA_DL_CHAPTER: ${{ inputs.PICA_DL_CHAPTER }}
+  PICA_PRINT_FAVS: ${{ inputs.PICA_PRINT_FAVS && 'true' || '' }}
 
 jobs:
   download:
@@ -74,12 +67,11 @@ jobs:
 
       - name: Download content
         run: pnpm start
-        continue-on-error: true
 
       - name: Compress chapters
         if: inputs.OUTPUT_ZIP
         run: pnpm start:zip
-        continue-on-error: true
+
 
       - name: Upload to GitHub
         uses: actions/upload-artifact@v4
