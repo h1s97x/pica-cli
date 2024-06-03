@@ -1,4 +1,4 @@
-name: Download PICA Comics(dispatch)
+name: 下载收藏夹
 
 on:
   workflow_dispatch:
