@@ -3,7 +3,7 @@ name: 下载收藏夹
 on:
   workflow_dispatch:
     inputs:
-        PICA_DL_FAV_PAGE:
+      PICA_DL_FAV_PAGE:
         description: '指定下载收藏夹的第几页(示例：1,3,5-20)'
         type: 'string'
         default: 'all'
